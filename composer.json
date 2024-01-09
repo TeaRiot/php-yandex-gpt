@@ -1,0 +1,27 @@
+{
+    "name": "teariot/php-yandex-gpt",
+    "description": "A PHP library for seamless interaction with Yandex GPT (Generative Pre-trained Transformer) API, providing text generation, tokenization, and embedding functionalities.",
+    "keywords": [
+        "Yandex GPT",
+        "yandex"
+    ],
+    "homepage": "https://github.com/TeaRiot/php-yandex-gpt",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "TeaRiot",
+            "email": "teaRiot@yandex.ru"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "TeaRiot\\YandexGpt\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
