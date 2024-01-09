@@ -32,8 +32,8 @@ public static function complete(string $message): array
     $completion->setModelUri(self::folder_id, 'yandexgpt-lite/latest')
             ->addText([
                 [
-                    $completion::ROLE => $completion::USER,
-                    $completion::TEXT => $message,
+                    'role' => $completion::USER,
+                    'text' => $message,
                 ]
             ]);
 
@@ -61,12 +61,12 @@ public static function complete(string $systemMessage, string $userMessage): arr
     $completion->setModelUri(self::folder_id, 'yandexgpt-lite/latest')
             ->addText([
                 [
-                    $completion::ROLE => $completion::SYSTEM,
-                    $completion::TEXT => $systemMessage,
+                    'role' => $completion::SYSTEM,
+                    'text' => $systemMessage,
                 ],
                 [
-                    $completion::ROLE => $completion::USER,
-                    $completion::TEXT => $message,
+                    'role' => $completion::USER,
+                    'text' => $message,
                 ],
             ]);
 
