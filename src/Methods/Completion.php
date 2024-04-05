@@ -73,6 +73,8 @@ class Completion extends Task
      */
     const USER = 'user';
 
+    private $url = Url::COMPLETION;
+
     public function __construct()
     {
         $this->setStream(false);
@@ -150,7 +152,21 @@ class Completion extends Task
      */
     public function getUrl(): string
     {
-        return Url::COMPLETION;
+        return $this->url;
+    }
+
+    /**
+     * Sets the operation mode to asynchronous.
+     * In asynchronous mode, the request does not wait for the complete text generation by the model.
+     * Instead, it initiates the generation process and immediately returns, allowing for the process to be completed in the background.
+     * Use this mode for long-running text generation tasks where immediate response is not critical.
+     *
+     * @return Completion Returns the instance of this class for fluent interface, with the URL set for asynchronous operation.
+     */
+    public function isAsync(): Completion
+    {
+        $this->url = Url::COMPLETION_ASYNC;
+        return $this;
     }
 
 

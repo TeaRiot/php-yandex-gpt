@@ -28,10 +28,10 @@ abstract class Task
     abstract public function getUrl(): string;
 
     /**
-     * @return string|null
+     * @return array
      */
     public function getParam()
     {
-        return ($this->task !== []) ? json_encode($this->task) : null;
+        return ($this->task !== []) ? $this->task : null;
     }
 }

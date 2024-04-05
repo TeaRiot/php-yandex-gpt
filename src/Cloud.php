@@ -97,7 +97,7 @@ class Cloud extends Request
     private function getIamToken(string $oAuthToken): string
     {
         $response = $this->send(Url::TOKENS,
-            json_encode([self::YANDEX_PASSPORT_OAUTH_TOKEN => $oAuthToken]),
+            [self::YANDEX_PASSPORT_OAUTH_TOKEN => $oAuthToken],
             ['Content-Type: application/json']);
 
         return (string) json_decode($response)->iamToken;
@@ -126,8 +126,40 @@ class Cloud extends Request
     {
         $task->addParam($this->task);
 
-        return $this->send($task->getUrl(),
-            $task->getParam(),
-            array_merge($this->headers, $task->headers));
+        $params = $task->getParam();
+        $result = $this->send($task->getUrl(), $params, array_merge($this->headers, $task->headers));
+
+        if (isset($params['markerKey'])) {
+            return $this->waitForCompletion($result, $task);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Waits for the completion of a task and returns the result in a JSON-encoded format.
+     * Keeps sending requests until 'done' status is true or until the timeout (2 minutes) is reached.
+     * Returns a JSON-encoded empty array if the timeout is reached without completion.
+     *
+     * @param string $result The initial result of the task.
+     * @param Task $task The task being processed.
+     * @return string JSON-encoded final result of the task processing.
+     */
+    private function waitForCompletion(string $result, Task $task): string
+    {
+        $params = $task->getParam();
+        $startTime = time();
+
+        $timeout = $params['timeout'] ?? 120;
+        do {
+            $response = json_decode($result, true);
+            if (isset($response['done']) && $response['done'] === true) {
+                return json_encode($response['response']);
+            }
+            sleep(2);
+            $result = $this->send($task->getUrl(), $params, array_merge($this->headers, $task->headers));
+        } while (time() - $startTime < $timeout);
+
+        return json_encode([]);
     }
 }

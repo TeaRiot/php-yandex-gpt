@@ -4,6 +4,7 @@ namespace TeaRiot\YandexGpt;
 
 class Url
 {
+    // Sync methods
     /**
      * @link https://cloud.yandex.ru/docs/iam/operations/iam-token/create
      */
@@ -26,5 +27,13 @@ class Url
      * @link https://cloud.yandex.ru/ru/docs/yandexgpt/api-ref/v1/Tokenizer/
      */
     const TOKENIZER = 'https://llm.api.cloud.yandex.net/foundationModels/v1/tokenizeCompletion';
+
+    const OPERATION = 'https://operation.api.cloud.yandex.net/operations';
+
+    /**
+     * Service for text generation.
+     * @link https://cloud.yandex.ru/ru/docs/yandexgpt/api-ref/v1/TextGeneration/
+     */
+    const COMPLETION_ASYNC = 'https://llm.api.cloud.yandex.net/foundationModels/v1/completionAsync';
 
 }
