@@ -43,6 +43,46 @@ public static function complete(string $message): array
 ?>
 ```
 
+Or you can use asynchronous text generation.
+
+```php
+<?php
+
+const OAuthToken = 'YOUR_OAUTH_TOKEN';
+const folder_id = 'YOUR_FOLDER_ID';
+
+public static function complete(string $message): array
+{
+    $cloud = new Cloud(self::OAuthToken, self::folder_id);
+    $completion = new Completion();
+    
+    $completion->setModelUri(self::folder_id, 'yandexgpt-lite/latest')
+            ->addText([
+                [
+                    'role' => $completion::USER,
+                    'text' => $message,
+                ]
+            ])
+            ->isAsync();
+            
+    $taskData = $cloud->request($completion);
+    $taskData = json_decode($taskData, true);
+    
+    $operation = new Operation();
+    if (!empty($taskData) && isset($taskData['id'])) {
+        $operation = $operation->waitAndGet($result['id'])
+            ->setTimeOut(240);  // Optional: Sets the timeout for the operation. Default timeout is 120 seconds.
+            
+        $result = $cloud->request($operation);
+        $result = json_decode($result, true);
+        return json_decode($result, true);
+    }
+    return [];
+}
+?>
+```
+
+
 ## Enhanced Usage of `complete` Method
 
 This variation showcases an extended use case of the `complete` method by incorporating system messages along with user messages.
